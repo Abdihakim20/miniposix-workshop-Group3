@@ -51,8 +51,8 @@
         "outputOnFailure": true
       },
       "filter": {
-        "label": {
-          "include": "smoke"
+        "include": {
+          "label": "smoke"
         }
       }
     },
@@ -63,8 +63,8 @@
         "outputOnFailure": true
       },
       "filter": {
-        "label": {
-          "include": "functional"
+        "include": {
+          "label": "functional"
         }
       }
     }
