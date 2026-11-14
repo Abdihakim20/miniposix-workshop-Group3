@@ -1,0 +1,47 @@
+name: Build and test
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  clang22:
+    name: Clang 22 / C++23
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Install Clang 22 and build tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y ca-certificates curl gnupg cmake ninja-build libgtest-dev
+          sudo install -d -m 0755 /etc/apt/keyrings
+          curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key \
+            | sudo gpg --dearmor -o /etc/apt/keyrings/apt.llvm.org.gpg
+          echo 'deb [signed-by=/etc/apt/keyrings/apt.llvm.org.gpg] https://apt.llvm.org/noble/ llvm-toolchain-noble-22 main' \
+            | sudo tee /etc/apt/sources.list.d/llvm-22.list
+          sudo apt-get update
+          sudo apt-get install -y clang-22
+          clang-22 --version
+          clang++-22 --version
+
+      - name: Configure with Clang 22
+        run: cmake --preset clang22-debug
+
+      - name: Build
+        run: cmake --build --preset clang22-debug --parallel
+
+      - name: Infrastructure smoke test
+        run: ctest --preset clang22-debug-smoke --no-tests=error
+
+      - name: Functional tests (expected to fail in the starter)
+        run: ctest --preset clang22-debug-functional --no-tests=error

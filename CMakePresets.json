@@ -1,0 +1,72 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 25,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "clang22-debug",
+      "displayName": "Clang 22 Debug",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/clang22-debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_C_COMPILER": "clang-22",
+        "CMAKE_CXX_COMPILER": "clang++-22",
+        "CMAKE_CXX_STANDARD": "23",
+        "CMAKE_CXX_STANDARD_REQUIRED": "ON",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+        "BUILD_TESTING": "ON"
+      }
+    },
+    {
+      "name": "clang22-perf",
+      "displayName": "Clang 22 RelWithDebInfo",
+      "inherits": "clang22-debug",
+      "binaryDir": "${sourceDir}/build/clang22-perf",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "CMAKE_C_FLAGS_RELWITHDEBINFO": "-O2 -g -DNDEBUG -fno-omit-frame-pointer",
+        "CMAKE_CXX_FLAGS_RELWITHDEBINFO": "-O2 -g -DNDEBUG -fno-omit-frame-pointer"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "clang22-debug",
+      "configurePreset": "clang22-debug"
+    },
+    {
+      "name": "clang22-perf",
+      "configurePreset": "clang22-perf"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "clang22-debug-smoke",
+      "configurePreset": "clang22-debug",
+      "output": {
+        "outputOnFailure": true
+      },
+      "filter": {
+        "label": {
+          "include": "smoke"
+        }
+      }
+    },
+    {
+      "name": "clang22-debug-functional",
+      "configurePreset": "clang22-debug",
+      "output": {
+        "outputOnFailure": true
+      },
+      "filter": {
+        "label": {
+          "include": "functional"
+        }
+      }
+    }
+  ]
+}
