@@ -1,0 +1,30 @@
+# Instructor materials and local agent configuration
+/setup.md
+/AGENTS.md
+/instructor/
+/private/
+/local/
+/.codex/
+/.opencode/
+/opencode.json
+/opencode.jsonc
+/CMakeUserPresets.json
+
+# Credentials and local data
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Build outputs and local tools
+/build/
+/cmake-build-*/
+/.idea/
+/.cache/
+/.venv/
+/coverage/
+/bench-results/
+__pycache__/
+*.pyc
+.DS_Store
