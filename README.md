@@ -6,12 +6,20 @@ No previous POSIX experience is required. A **file descriptor** is an integer ha
 
 ## What you need
 
-- Linux, preferably Ubuntu 24.04 LTS.
+- Linux. On university Windows computers, use the preconfigured Ubuntu virtual machine below. On your own computer, Ubuntu 24.04 LTS is recommended.
 - LLVM/Clang 22.x as `clang-22` and `clang++-22`, with C++23 support. The project presets use these executable names explicitly. On Ubuntu, follow the [official LLVM APT instructions](https://apt.llvm.org/) for your release if they are missing. A generic `clang++` command may select a different version.
 - CMake 3.28 or newer, Ninja, Git, and GoogleTest development files. On Ubuntu, install the test dependency with `sudo apt install libgtest-dev`.
 - [uv](https://docs.astral.sh/uv/getting-started/installation/) and Python 3.12 or newer for CSV analysis. `uv` manages the analysis environment locally and can install a compatible Python; see [analysis/README.md](analysis/README.md).
 - [OpenCode](https://opencode.ai/docs/) for the agent exercise. Use an available model; the workshop does not require a particular paid model or API key.
-- CLion is optional. You can complete everything from a terminal.
+- On university computers, configure CLion in the Ubuntu virtual machine as described below. The project can also be completed from a terminal.
+
+## On university Windows computers
+
+1. In Windows, open **Oracle VirtualBox**. Select the virtual machine labeled **Ubuntu 26.06 LTS AI** and start it. This is the name shown in VirtualBox.
+2. Open a terminal and CLion **inside the Ubuntu virtual machine**. Clone the repository and run all build, test, agent, and analysis commands there.
+3. In the Ubuntu terminal, check `command -v clang-22 clang++-22`. Both commands should resolve to `/usr/bin`.
+4. In CLion, open **Settings → Build, Execution, Deployment → Toolchains** and add or select a local toolchain. Set **C Compiler** to `/usr/bin/clang-22` and **C++ Compiler** to `/usr/bin/clang++-22`, then apply the settings.
+5. In **Settings → Build, Execution, Deployment → CMake**, enable the `clang22-debug` preset if it is disabled. Select that preset before building.
 
 Check your tools before starting:
 
