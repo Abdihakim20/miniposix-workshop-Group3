@@ -60,12 +60,20 @@ If your library is unfinished, use the instructor's reference variant or a suppl
 
 ## Afternoon exercise: compare AI answers and design a verification workflow
 
-Choose one specific question about POSIX behavior that matters to your implementation, such as descriptor ownership, end-of-file, or short `read`/`write` calls. Ask the **same question** in two separate agent conversations (or with two available models). Save both answers. Compare their checkable claims, including any claim on which they disagree; agreement alone is not evidence.
+**Timebox: 35 minutes.** Work with one specific POSIX question that matters to your implementation, such as descriptor ownership, end-of-file, or short `read`/`write` calls:
 
-For at least one important claim, record the exact claim, what each answer says, a link to relevant POSIX/Linux documentation, a focused test and its observed result, and your team's decision: **accept, revise, or reject**. A small standalone test is fine if your library is unfinished. Note any uncertainty the documentation or test cannot resolve. A test demonstrates behavior in its tested conditions; explain when you need a documented rule as well.
+1. **5 minutes:** Ask the same question in two separate agent conversations (or with two available models). Save both answers, compare their checkable claims, and mark one important claim. Note any disagreement; agreement alone is not evidence.
+2. **10 minutes:** Find a relevant POSIX/Linux documentation page. Record its URL and what it says about the claim.
+3. **10 minutes:** Run a focused test and record the command and observed result. A small standalone test is fine if your library is unfinished. Explain what the test shows in its conditions and what still needs a documented rule.
+4. **10 minutes:** Save one small JSON evidence record with the fields `claim`, `source_url`, `test_command`, `observed`, and `verdict`. A team member must set `verdict` to **accept**, **revise**, or **reject** after reviewing both answers, the source, and the test. Note any unresolved uncertainty. Draw a small workflow, or write a short script, that collects the evidence and stops before submitting or updating a PR for this **human decision**. Show where an accepted change goes next (review and CI) and where a rejected or uncertain claim goes for revision.
 
-Draw a small workflow from question or code change through agent answers, documentation lookup, focused test, and a clearly marked **human decision point**. Show where an accepted change goes next (for example, review and CI) and where a rejected or uncertain claim goes for revision. Bring the two answers, evidence record, test result, and workflow sketch to the final discussion.
+Bring the two saved answers, documentation link, test result, JSON record, and workflow sketch or script to the final discussion. This is a verification workflow design; it does not require a service or a new C++ API.
+
+### If your team finishes early
+
+- Add one public test for `Pipe` move assignment. Give the destination pipe its own descriptors before the assignment and check with a POSIX call that those old descriptors are closed afterward. Explain why checking only the wrapper values would miss a leak.
+- Run the benchmark again with the same transfer settings and at least 10 repeats, saving to a fresh CSV path. Compare the median and spread with your own first run, not a supplied CSV from another machine. List the variables recorded in the CSV and relevant conditions it does not record, such as CPU, system load, OS, and compiler. Explain how these missing features limit any performance claim.
 
 ## Finish and discuss
 
-Show the instructor your fork's PR, local test results, attempt log, CSV/plot or supplied-data analysis, and a brief explanation of one agent suggestion you accepted or rejected. Mark what you could not verify. For the final architecture discussion, sketch one possible extension, such as a subprocess or an event-driven interface, and identify which new ownership or error cases it would introduce; no implementation is required.
+Show the instructor your fork's PR, local test results, attempt log, CSV/plot or supplied-data analysis, and the afternoon evidence record and workflow. Mark what you could not verify. For the final architecture discussion, sketch one possible extension, such as a subprocess or an event-driven interface, and identify which new ownership or error cases it would introduce; no implementation is required.
