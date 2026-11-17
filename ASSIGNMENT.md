@@ -58,6 +58,14 @@ In your team's notes, answer:
 
 If your library is unfinished, use the instructor's reference variant or a supplied CSV for the analysis portion. Report the provenance of the data. Do not invent measurements. You can ask AI to suggest interpretations, but check them against the raw CSV, repeats, and measurement conditions.
 
+## Afternoon exercise: compare AI answers and design a verification workflow
+
+Choose one specific question about POSIX behavior that matters to your implementation, such as descriptor ownership, end-of-file, or short `read`/`write` calls. Ask the **same question** in two separate agent conversations (or with two available models). Save both answers. Compare their checkable claims, including any claim on which they disagree; agreement alone is not evidence.
+
+For at least one important claim, record the exact claim, what each answer says, a link to relevant POSIX/Linux documentation, a focused test and its observed result, and your team's decision: **accept, revise, or reject**. A small standalone test is fine if your library is unfinished. Note any uncertainty the documentation or test cannot resolve. A test demonstrates behavior in its tested conditions; explain when you need a documented rule as well.
+
+Draw a small workflow from question or code change through agent answers, documentation lookup, focused test, and a clearly marked **human decision point**. Show where an accepted change goes next (for example, review and CI) and where a rejected or uncertain claim goes for revision. Bring the two answers, evidence record, test result, and workflow sketch to the final discussion.
+
 ## Finish and discuss
 
 Show the instructor your fork's PR, local test results, attempt log, CSV/plot or supplied-data analysis, and a brief explanation of one agent suggestion you accepted or rejected. Mark what you could not verify. For the final architecture discussion, sketch one possible extension, such as a subprocess or an event-driven interface, and identify which new ownership or error cases it would introduce; no implementation is required.

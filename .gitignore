@@ -23,6 +23,7 @@
 /.idea/
 /.cache/
 /.venv/
+/analysis/.venv/
 /coverage/
 /bench-results/
 __pycache__/

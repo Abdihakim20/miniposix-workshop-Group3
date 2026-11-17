@@ -8,17 +8,19 @@ No previous POSIX experience is required. A **file descriptor** is an integer ha
 
 - Linux, preferably Ubuntu 24.04 LTS.
 - LLVM/Clang 22.x as `clang-22` and `clang++-22`, with C++23 support. The project presets use these executable names explicitly. On Ubuntu, follow the [official LLVM APT instructions](https://apt.llvm.org/) for your release if they are missing. A generic `clang++` command may select a different version.
-- CMake 3.28 or newer, Ninja, Git, GoogleTest development files, and Python 3 with `venv` and `pip`. On Ubuntu, install the test dependency with `sudo apt install libgtest-dev`.
+- CMake 3.28 or newer, Ninja, Git, and GoogleTest development files. On Ubuntu, install the test dependency with `sudo apt install libgtest-dev`.
+- [uv](https://docs.astral.sh/uv/getting-started/installation/) and Python 3.12 or newer for CSV analysis. `uv` manages the analysis environment locally and can install a compatible Python; see [analysis/README.md](analysis/README.md).
 - [OpenCode](https://opencode.ai/docs/) for the agent exercise. Use an available model; the workshop does not require a particular paid model or API key.
 - CLion is optional. You can complete everything from a terminal.
 
 Check your tools before starting:
 
 ```bash
-command -v clang-22 clang++-22 cmake ninja git python3
+command -v clang-22 clang++-22 cmake ninja git uv
 clang-22 --version
 clang++-22 --version
 cmake --version
+uv --version
 ```
 
 If LLVM is installed outside `/usr/bin`, put the directory containing both compiler executables on `PATH` **before** configuring CMake. For example, run `export PATH="/path/to/llvm/bin:$PATH"`, then confirm both paths with `command -v clang-22 clang++-22`. In CLion, set the C and C++ compiler paths in **Settings → Build, Execution, Deployment → Toolchains** and make sure CLion also inherits that `PATH` before choosing the matching CMake preset. The preset fixes the compiler for terminal and agent runs; changing only the CLion toolchain is insufficient.
@@ -76,13 +78,13 @@ cmake --preset clang22-perf
 cmake --build --preset clang22-perf --parallel
 mkdir -p bench-results
 ./build/clang22-perf/bench_pipe --output bench-results/pipe.csv
-python3 -m venv .venv
-. .venv/bin/activate
-python3 -m pip install -r requirements.txt
-python3 analysis/analyze.py bench-results/pipe.csv --plot bench-results/throughput.png
+uv sync --project analysis --locked
+uv run --project analysis --locked python analysis/analyze.py bench-results/pipe.csv --plot bench-results/throughput.png
 ```
 
 By default, the benchmark transfers 8 MiB for each of three repeats at buffer sizes 512, 4096, and 65536 bytes. You can change these with `--bytes N --repeats N --buffer-sizes 512,4096,65536`. It verifies the transferred bytes and **appends** CSV rows, so use a fresh output path for a separate run. Inspect the CSV as well as the plot. This measures the **whole transfer scenario**, including I/O, scheduling, and buffer management; it does not isolate the cost of `UniqueFd`. Run performance measurements with `clang22-perf`, not the Debug preset.
+
+For installation and an explanation of the analysis commands, see [analysis/README.md](analysis/README.md). The Python packages go into `analysis/.venv`, not a global Python environment.
 
 On Linux, optional local counters are available if `perf stat` and its permissions allow them:
 
